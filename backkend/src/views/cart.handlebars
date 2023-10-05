@@ -1,0 +1,44 @@
+<div>
+  <header class="header-products">
+      <a href="/products"><img src="/images/Logo.png" alt="Business logo"></a>
+      <ul class="header-sections">
+        <li class="header-section">Inicio</li>
+        {{#if adminRole}}<li class="realTimeProductsBtn">Administrar</li>{{/if}}
+      </ul>
+      <div class="user-cart_container">
+        <div class="username_container">
+          <span class="username_display">{{username}}<span class="hashtag">#</span>
+          {{#if adminRole}}<span class="role">admin</span>{{else}}<span class="role">user</span>{{/if}}
+          <button class="logout">Logout<i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+          <div class="viewCart"><i class="fa-solid fa-cart-shopping"></i><span class="countProducts"></span></div>
+      </div>
+  </header>
+  <div class="title_checkoutCart">Tu carrito</div>
+      <div class="productCart_Container_titles">
+        <span></span>
+        <span>Producto</span>
+        <span>$/u.</span>
+        <span>Cantidad</span>
+        <span>Precio</span>
+      </div>
+    <div class="container_checkoutCart">
+      {{#each prodsTemp}}
+          <div class="productCart_Container">
+            <img src="{{product.thumbnail}}" alt="Imagen de {{product.title}}">
+            <span class="productCart_title">{{product.title}}</span>
+            <span class="productCart_price">${{product.price}}</span> 
+            <span class="productCart_qty">{{quantity}}</span>
+            <span class="productCart_totalPrice">${{price}}</span>
+          </div>
+      {{/each}}
+    </div>
+    <div class="total_Container"><span>Total :</span><span class="total_value">${{total}}</span></div>
+    <button type="button" class="confirmPurchaseBTN">Confirme su compra</button>
+  <footer class="footer">
+      Mi tienda de Computadoras Gamer
+  </footer>
+</div>
+
+<script src="/js/products.js"></script>
+<script src="/js/cartCheckout.js"></script>
