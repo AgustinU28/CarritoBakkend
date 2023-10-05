@@ -10,10 +10,13 @@ async function postLogin(username, password, currentCartID) {
       },
       body: JSON.stringify({ username, password, currentCartID }),
     });
-    
     const result = await response.json();
-    return result;
+    console.log({response})
+    console.log({result})
+    return response;
+    
   } catch (error) {
+    console.log({error})
     return {'status':"Not ok"}
   }
 }
@@ -58,7 +61,8 @@ loginForm.addEventListener("submit", async e => {
   const password = document.getElementById("password").value;
   currentCartID = await getCartId(username);
   const response = await postLogin(username, password, currentCartID);
-  if(response.status == 'ok'){
+  // console.log({response})
+  if(response.ok){
     window.location.href = '/products';
   } else {
     errorLogin.style.display = 'block'

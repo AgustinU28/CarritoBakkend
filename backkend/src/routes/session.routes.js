@@ -2,8 +2,11 @@ import { Router } from "express";
 import { createHash } from "../utils.js";
 import passport from "passport";
 import {UserManager} from "../dao/dbManagers/DBuserManager.js"
+import CustomError from "../servicios/errores/customError.js";
+import EErrors from "../servicios/errores/enumError.js"
 
 const userManager = new UserManager()
+
 
 const router = Router();
 
@@ -11,28 +14,45 @@ export function authUser(req, res, next) {
   if (req.session?.username) {
     return next();
   }
-  return res.status(401).json("error de autenticacion");
+  const error = CustomError.createError({
+    name: "Usuario no autenticado",
+    cause:"Missing session",
+    message:"Error trying to validate user",
+    code:EErrors.AUTHENTICATION_ERROR,
+  })
+  return res.status(401).json({error});
 }
 
 export function authAdmin(req, res, next) {
   if (req.session?.username && req.session?.role == "admin") {
     return next();
   }
-  return res.status(401).json("error de autenticacion");
+  const error = CustomError.createError({
+    name: "Usuario no autenticado",
+    cause:"Missing session",
+    message:"Error trying to validate user",
+    code:EErrors.AUTHENTICATION_ERROR,
+  })
+  return res.status(401).json({error});
 }
 
 
 // Login con Passport
 router.post('/login', passport.authenticate('login'), async (req, res) => {
   if (!req.user) {
-    return res.status(401).json({status:'Error', error:'Credenciales inválidas'})
+    const error = CustomError.createError({
+      name: "Error en login",
+      cause:"Credenciales inválidas",
+      message:"Error trying to validate user",
+      code:EErrors.AUTHENTICATION_ERROR,
+    })
+    return res.json({error});
   } else {
     req.session.username = req.user.email;
     req.session.currentCartID = req.user.currentCartID;
     req.session.role = req.user.role;
 
     const result = await userManager.setCartID(req.user.email, req.user.currentCartID)
- 
     res.status(200).json({status:'ok', message: 'Logueado exitosamente', bd: result})
   }
 })
@@ -99,11 +119,13 @@ router.post("/forgot", async (req, res) => {
 router.get('/github', passport.authenticate('github',
   { scope:['user:email'] }), async (req,res) => {})
 
-  router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), async (req, res) => {
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}),
+  async (req,res) =>{
     req.session.username = req.user.email;
-    res.redirect('/products');
-  })
-  
+    res.redirect('/products')
+  }
+  )
+
 export default router;
 
 

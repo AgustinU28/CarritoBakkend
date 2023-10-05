@@ -90,7 +90,3 @@ function updateProductList(products) {
     });
   }
 
-const realTimeProductsBtn = document.querySelector('.realTimeProducts');
-realTimeProductsBtn.addEventListener('click', e =>{
-  window.location.href = '/realtimeproducts'
-})
