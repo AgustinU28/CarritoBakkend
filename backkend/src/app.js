@@ -10,14 +10,17 @@ import realtimeRouter from './routes/realtimeprods.routes.js';
 import chatRouter from './routes/chat.routes.js';
 import loginRouter from './routes/login.routes.js';
 import sessionRouter from './routes/session.routes.js';
-import signupRouter from './routes/signup.routes.js'; // Deja esta línea
+import signupRouter from './routes/signup.routes.js'; 
 import forgotRouter from './routes/forgotPass.routes.js';
 
+import { ProductManager } from "./dao/dbManagers/DBproductManager.js";
 
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cookieParser from "cookie-parser";
-
+import { MessageManager } from './dao/dbManagers/DBmessageManager.js'; 
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 
