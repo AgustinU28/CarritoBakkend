@@ -32,4 +32,4 @@ export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSy
 
 export const isValidPassword = (savedPassword, password) => bcrypt.compareSync(password, savedPassword)
 
-export default { readFile, writeFile }
+export default { readFile, writeFile}

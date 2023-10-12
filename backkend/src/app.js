@@ -15,6 +15,8 @@ import forgotRouter from './routes/forgotPass.routes.js';
 
 import { ProductManager } from "./dao/dbManagers/DBproductManager.js";
 
+import logger from '../src/logger/logger.js';
+
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import session from 'express-session';
@@ -79,6 +81,24 @@ app.use(
         saveUninitialized: false,
     })
 );
+
+// Middleware para registrar las solicitudes HTTP en el nivel "http"
+app.use((req, res, next) => {
+    logger.http(`${req.method} ${req.url}`);
+    next();
+  });
+  
+  // Ruta para probar los registros
+  app.get('/loggerTest', (req, res) => {
+    logger.debug('Este es un registro de nivel debug.');
+    logger.info('Este es un registro de nivel info.');
+    logger.warning('Este es un registro de nivel warning.');
+    logger.error('Este es un registro de nivel error.');
+    logger.fatal('Este es un registro de nivel fatal.');
+    res.send('Verifica la consola o el archivo "errors.log" para ver los registros.');
+  });
+  
+ 
 
 
 // Passport
