@@ -79,25 +79,21 @@ router.get('/:cid/totalprods', async (req, res)=>{
     }
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
-    // Aquí es donde debes agregar el código que proporcioné anteriormente
+router.post('/:cid/product/:pid', async (req, res)=>{
     try {
-      const { cid, pid } = req.params;
-      console.log("CID:", cid); // Agrega este log para verificar el valor de 'cid'
-      const cart = await cartManager.getCartById(cid);
-      console.log("CART:", cart); // Agrega este log para verificar el valor de 'cart'
-      let response = await cartManager.addProductToCart(cart, pid);
-      res.json({
-        message: "Producto agregado correctamente",
-        producto: pid,
-        cart: response
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: error });
+        const {cid, pid} = req.params;
+        const cart = await cartManager.getCartById(cid);
+        let response = await cartManager.addProductToCart(cart, pid)
+        res.json({
+            message: "Producto agregado correctamente",
+            producto: pid,
+            cart: response
+        })
+    } catch (error) { 
+        console.log(error)
+        res.status(500).json({error: error})
     }
-  });
-  
+})
 
 router.delete('/:cid', async (req,res)=>{
     try{
@@ -145,29 +141,28 @@ router.put('/:cid/product/:pid', async (req,res) =>{
     }
 })
 
-router.put('/:cid', async (req, res) => {
-    const { cid } = req.params;
-    const { newProducts } = req.body;
-    try {
-        const response = await cartManager.updateArrCart(cid, newProducts);
-        res.json({
-            message: 'Productos agregados al carrito',
-            respuesta: response
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Error al agregar productos al carrito', error: error });
-    }
+router.put('/:cid', async (req,res) => {
+    const {cid} = req.params;
+    const {newProducts} = req.body;
+        try{
+            const res = await cartManager.updateArrCart(cid, newProducts)
+            res.json({ 
+                message: 'Productos agregados al carrito', 
+                respuesta: res 
+            });
+        } catch (error){
+            res.status(500).json({ message: 'Error al agregar productos al carrito', error: error });
+        }
 });
 
-router.get('/:cid/purchase', async (req, res) => {
-    const { cid } = req.params;
-    const username = req.session.username;
+router.get('/:cid/purchase', async (req,res)=>{
+    const {cid} = req.params;
+    const username = req.session.username
     const cart = await cartManager.getCartById(cid);
-    const resp = await ticketManager.addTicket(cart, username);
-    console.log('en cartroutes');
-    console.log({ resp });
-    res.json({ message: "Ticket generado", respuesta: resp });
-});
+    const resp = await ticketManager.addTicket(cart,username);
+    res.json({message:"Ticket generado", respuesta: resp})
+
+})
 
 
 

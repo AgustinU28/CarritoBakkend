@@ -22,5 +22,5 @@ confirmPurchaseBTN.addEventListener('click', async e =>{
         }
     }
     window.location.reload();
-    // console.log(purchaseJSON.ticket, purchaseJSON.remainingProds, purchaseJSON.purchased)
+  
 })

@@ -15,7 +15,7 @@ import forgotRouter from './routes/forgotPass.routes.js';
 
 import { ProductManager } from "./dao/dbManagers/DBproductManager.js";
 
-import logger from '../src/logger/logger.js';
+import loggerTest from './routes/loggerTest.routes.js';
 
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
@@ -43,15 +43,13 @@ const MONGODB_URI = `${MONGODB_URL}${DB}`
 const environment = async () => {
     try {
       await mongoose.connect(MONGODB_URI);
-      console.log("Conexión a la base de datos Exitosa");
+      console.log("Base de datos conectada");
     } catch (error) {
       console.log(error);
     }
   };
   
 environment();
-
-
 
 // Inicialización de las instancias de Producto y Mensajes
 const productManager = new ProductManager()
@@ -82,25 +80,6 @@ app.use(
     })
 );
 
-// Middleware para registrar las solicitudes HTTP en el nivel "http"
-app.use((req, res, next) => {
-    logger.http(`${req.method} ${req.url}`);
-    next();
-  });
-  
-  // Ruta para probar los registros
-  app.get('/loggerTest', (req, res) => {
-    logger.debug('Este es un registro de nivel debug.');
-    logger.info('Este es un registro de nivel info.');
-    logger.warning('Este es un registro de nivel warning.');
-    logger.error('Este es un registro de nivel error.');
-    logger.fatal('Este es un registro de nivel fatal.');
-    res.send('Verifica la consola o el archivo "errors.log" para ver los registros.');
-  });
-  
- 
-
-
 // Passport
 initializePassport();
 app.use(passport.initialize());
@@ -111,6 +90,8 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", `${__dirname}/views`);
 
+app.use(addLogger)
+
 // Rutas
 app.use("/realtimeproducts", realtimeRouter);
 app.use("/products", productRouter);
@@ -120,11 +101,18 @@ app.use("/", loginRouter);
 app.use("/signup", signupRouter);
 app.use("/api/session/", sessionRouter);
 app.use("/forgot", forgotRouter);
+app.use("/mockingproducts", mockingProducts);
+app.use("/loggertest", loggerTest);
+app.use("/api/users", userRoutes);
+app.use("/premium", premiumRouter);
 
 // Inicialización del server
 const httpServer = app.listen(PORT, (e)=>{
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+    console.log(`Servidor escuchando en el puerto: ${PORT}`);
 });
+
+
+
 
 // WebSockets para la sección de chat y update en tiempo real de productos
 const socketServer = new Server(httpServer);
@@ -134,7 +122,18 @@ let messages = await messageManager.getMessages() || [];
 socketServer.on("connection", socket => {
     console.log("Nuevo cliente conectado");
     socket.on("addProduct", async newProduct => {
-        await productManager.addProduct(newProduct);
+        console.log(newProduct)
+        if (newProduct.title.length < 4 || newProduct.description.length < 11) {
+            const error = CustomError.createError({
+                name : "Error al agregar un producto",
+                cause : "Parámetros incompletos o muy cortos",
+                message : generateProductErrorInfo(newProduct),
+                code : EErrors.INVALID_TYPES_ERROR,
+            })
+            console.log({error})
+        } else{
+            await productManager.addProduct(newProduct);
+        }
         // Agregar el nuevo producto a la lista de productos
         let products = await productManager.getProductsRealtime();
         socket.emit("updateList", products);
@@ -151,9 +150,17 @@ socketServer.on("connection", socket => {
     socketServer.emit('messageLogs', messages);
     
     socket.on('message', async data =>{
-        messages.push(data);
-        await messageManager.addMessage(data.user, data.message)
-        socketServer.emit('messageLogs', messages)
+        if(!data){
+            const error = CustomError.createError({
+                name : "Error enviar mensaje",
+                cause : "Mensaje vacío",
+                code : EErrors.INVALID_TYPES_ERROR,
+            })
+        } else {            
+            messages.push(data);
+            await messageManager.addMessage(data.user, data.message)
+            socketServer.emit('messageLogs', messages)
+        }
     });
     socket.on("disconnect", () => {
         console.log("Cliente desconectado");

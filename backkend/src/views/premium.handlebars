@@ -1,0 +1,80 @@
+<div>
+  <h1>Productos {{user}}</h1>
+
+  <form id="productForm">
+    {{!-- <label for="productTitle">Título:</label> --}}
+    <input
+      type="text"
+      id="productTitle"
+      name="title"
+      placeholder="Título del producto"
+    />
+
+    {{!-- <label for="productDescription">Descripción:</label> --}}
+    <textarea
+      id="productDescription"
+      name="description"
+      placeholder="Descripción del producto"
+    ></textarea>
+
+    {{!-- <label for="productPrice">Precio:</label> --}}
+    <input
+      type="number"
+      id="productPrice"
+      name="price"
+      step="1"
+      placeholder="Precio del producto"
+    />
+
+    {{!-- <label for="productThumbnail">Thumbnail:</label> --}}
+    <input
+      type="text"
+      id="productThumbnail"
+      name="thumbnail"
+      placeholder="URL del thumbnail"
+    />
+
+    {{!-- <label for="productCode">Código:</label> --}}
+    <input
+      type="text"
+      id="productCode"
+      name="code"
+      placeholder="Código del producto"
+    />
+
+    {{!-- <label for="productStock">Stock:</label> --}}
+    <input
+      type="number"
+      id="productStock"
+      name="stock"
+      step="1"
+      placeholder="Stock del producto"
+    />
+
+    <select name="category" id="productCategory">
+      <option value="Almacén">Almacén</option>
+      <option value="Bebidas">Bebidas</option>
+      <option value="Limpieza">Limpieza</option>
+      <option value="Congelados">Congelados</option>
+    </select>
+    <input type="hidden" id="productOwner" name="owner" value="{{user}}">
+    <button type="submit">Agregar</button>
+  </form>
+  
+  <h2>Productos agregados</h2>
+  <ul id="productList">
+      {{#each products}}
+        <li>
+          <h3>{{title}}</h3>
+          <p>Descripción: {{description}}</p>
+          <img src={{thumbnail}} />
+          <p>Precio: ${{price}}</p>
+          <button class="btnEliminar" data-id="{{_id}}" owner="{{owner}}">Eliminar</button>
+        </li>
+      {{/each}}
+
+  </ul>
+</div>
+
+
+<script src="/js/premium.js"></script>
