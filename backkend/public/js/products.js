@@ -30,7 +30,15 @@ function setParams(sort,limit,search){
         }
     } 
     let params = `/products?limit=${limit}&sorted=${sort}&search=${search}`;
-    return params;
+    let url = new URL(window.location.href.split('?')[0]);
+    url.pathname = '/products';
+    url.searchParams.append('search',search);
+    url.searchParams.append('sorted', sort);
+    url.searchParams.append('limit', limit);
+
+    console.log({params});
+    console.log({url})
+    // return params;
 }
 
 // Inicia
@@ -56,6 +64,7 @@ addToCartBtns.forEach(btn =>{
             const res = await fetch(`/cart/${currentCartID}/product/${productID}`, {
                 method:"POST"
             });
+            console.log({res})
             updateCart(currentCartID)
         }
     })
@@ -70,7 +79,7 @@ if (viewCart) {
 if(paramsForm){
     paramsForm.addEventListener('change', e =>{
         let params = setParams(sort.value, limit.value, search.value || "");
-        window.location.href = params;
+        // window.location.href = params;
     })
 }
 

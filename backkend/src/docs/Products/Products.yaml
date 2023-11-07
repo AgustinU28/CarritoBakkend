@@ -1,0 +1,242 @@
+paths:
+  /products:
+    get:
+      summary: Obtiene todos los productos, recibe query.params y maneja valores por default (limit = 10, page = 1, sorted = 1, search = "")
+      parameters: 
+      - name: limit
+        description: Limita la cantidad de resultados mostrados en pantalla, default 10.
+        in: query
+        required: false
+        schema: 
+          $type: integer
+      - name: page
+        description: Indica la página que se debe mostrar
+        in: query
+        required: false
+        schema: 
+          $type: integer
+      - name: sorted
+        description: Indica el orden de los productos
+        in: query
+        required: false
+        schema: 
+          $type: integer
+      - name: search
+        description: Valor de la búsqueda
+        in: query
+        required: false
+        schema: 
+          $type: string
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/products'
+        "401":
+          description: Usuario no autenticado
+    post:
+      summary: Agrega un nuevo producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/add'
+      tags:
+        - Products
+      responses:
+        "201":
+          description: El producto fue creado satisfactoriamente.
+        "401":
+          description: Usuario no autenticado
+        "400":
+          description: Código del producto repetido o parámetros faltantes en el body
+        "500":
+          description: Error en el servidor
+  /products/{id}:
+    get: 
+      summary: Obtiene un solo producto especificado por id
+      parameters: 
+      - name: pid
+        description: Especifica el _id del producto que se está buscando
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+      - Products
+      responses:
+        "200":
+          description: El producto fue obtenido satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: Usuario no autenticado
+        "404":
+          description: El producto solicitado no existe
+    put:
+      summary: Actualiza las propiedades de un producto
+      parameters: 
+      - name: pid
+        description: Especifica el _id del producto que se está buscando
+        in: path
+        required: true
+        schema: 
+          $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/update'
+      tags:
+      - Products
+      responses:
+        "200":
+          description: El producto fue actualizado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: El id del producto ingresado es inválido
+        "401":
+          description: Usuario no autenticado
+        "404":
+          description: El producto solicitado no existe
+        "500":
+          description: Error del servidor
+    delete:
+      summary: Elimina un producto
+      parameters: 
+      - name: pid
+        description: Especifica el _id del producto que se está buscando
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+      - Products
+      responses:
+        "200":
+          description: El producto fue eliminado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: El id del producto ingresado es inválido
+        "401":
+          description: Usuario no autenticado
+        "404":
+          description: El producto solicitado no existe
+        "500":
+          description: Error del servidor  
+components:
+  schemas:
+    products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de MongoDB
+        title: 
+          type: String
+          description: Nombre del producto
+        description: 
+          type: String
+          description: Detalle sobre el producto
+        price: 
+          type: Number
+          description: Precio del producto
+        thumbnail: 
+          type: String
+          description: URL de la imagen del producto
+        code:
+          type: String
+          description: Código del producto que lo identifica unívocamente.
+        owner:
+          type: String
+          description: Usuario que cargó el producto en el sistema, por default es admin
+        stock: 
+          type: Number
+          description: Stock disponible del producto
+      example:
+        _id: ObjectId("64dc48341553f1dfa5625eef")
+        title: Producto de prueba
+        description: Este es un producto de prueba no válido para comercio
+        price: 999
+        thumbnail: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRheVhqS2WhErkUul63WP9MCImnbW-xQsgWlQ&usqp=CAU
+        code: TestingBox_999
+        owner: admin
+  requestBodies:
+    add:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: integer
+          description: Precio del producto
+        code:
+          type: string
+          description: Código del producto
+        stock:
+          type: string
+          description: Cantidad de unidades existentes del producto
+        owner:
+          type: string
+          description: Usuario que agregó el producto
+        thumbnail:
+          type: string
+          description: URL de la imágen representativa del producto
+      example:
+        title: Manzana Red com
+        description: Manzana roja comercial
+        price: 99
+        code: CommercialRedApple_m
+        stock: 2500
+        owner: admin
+        thumbnail: https://upload.wikimedia.org/wikipedia/commons/8/8d/Red_Apple_edit.png
+    update:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: integer
+          description: Precio del producto
+        code:
+          type: string
+          description: Código del producto
+        stock:
+          type: string
+          description: Cantidad de unidades existentes del producto
+        owner:
+          type: string
+          description: Usuario que agregó el producto
+        thumbnail:
+          type: string
+          description: URL de la imágen representativa del producto
+      example:
+        title: Manzana Red com
+        description: Manzana roja comercial
+        price: 999
+        code: CommercialRedApple_m
+        stock: 2500
+        owner: admin
+        thumbnail: https://upload.wikimedia.org/wikipedia/commons/8/8d/Red_Apple_edit.png        

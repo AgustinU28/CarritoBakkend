@@ -22,7 +22,7 @@ const forgotManager = new ForgotManager();
 const router = Router();
 
 export function authUser(req, res, next) {
-  if (req.session?.username) {
+  if (req.isAuthenticated()) {
     return next();
   }
   const error = CustomError.createError({
@@ -49,7 +49,7 @@ export function authAdmin(req, res, next) {
 
 export function authPremium(req, res, next) {
 
-  if (req.session?.username && req.session?.role == "premium") {
+  if (req.session?.username && (req.session?.role == "premium" || req.session?.role == "admin")) {
     return next();
   }
   const error = CustomError.createError({
@@ -63,48 +63,37 @@ export function authPremium(req, res, next) {
 
 // Login con Passport
 router.post('/login', passport.authenticate('login'), async (req, res) => {
+  let error;
   if (!req.user) {
-    const error = CustomError.createError({
+      error = CustomError.createError({
       name: "Error en login",
       cause:"Credenciales inválidas",
       message:"Error trying to validate user",
       code:EErrors.AUTHENTICATION_ERROR,
     })
     req.logger.warning('Warning: Credenciales incorrectas');
-    return res.json({error});
+    return res.status(401).json({error});
   } else {
     req.session.username = req.user.email;
     req.session.currentCartID = req.user.currentCartID;
     req.session.role = req.user.role;
 
     const result = await userManager.setCartID(req.user.email, req.user.currentCartID)
-    res.status(200).json({status:'ok', message: 'Logueado exitosamente', bd: result})
+    res.status(200).json({status:'ok', message: 'Logueado exitosamente'})
   }
 })
-
-router.get('/failLogin', async (req, res)=>{
-  res.render("failLogin", {title:'Falló'} )
-})
-
-router.post('/signup', passport.authenticate('register', {failureRedirect:'/failSignup'}), async (req, res)=>{
+router.post('/signup', passport.authenticate('register', {failureRedirect:'/signup'}), async (req, res)=>{
   const {email, currentCartID} = req.body;
   req.session.username = email;
   req.session.currentCartID = currentCartID;
   req.session.role = req.user.role;
 
-  const result = await userManager.setCartID(req.user.email, req.user.currentCartID)
+  const result = await userManager.setCartID(email, currentCartID)
 
-  res.status(200).json({status:'ok', message: 'user Registered', bd:result})
+  res.status(200).json({status:'ok', message: 'user Registered', payload:result})
 })
-
-// ------------------------------------------- EDIT
-
-router.get('/failSignup', async (req, res)=>{
-  console.log('Failed');
-  res.send({error: 'failed'})
-})
-
 router.get('/logout', (req,res)=>{
+  req.logOut();
   req.session.destroy((err) => {
     if (!err) {
       res.json({respuesta:'ok'});
@@ -117,7 +106,6 @@ router.get('/logout', (req,res)=>{
     }
   });
 })
-
 router.post("/forgot", async (req, res) => {
   const { username, password } = req.body;
 
@@ -144,7 +132,6 @@ router.post("/forgot", async (req, res) => {
     });
   }
 });
-
 router.post("/forgotbtn", async (req, res) => {
   const { username } = req.body;
 
@@ -213,29 +200,32 @@ router.post("/forgotbtn", async (req, res) => {
     });
   }
 });
-
 router.get('/forgot/:code', async (req,res)=>{
   const {code} = req.params;
   const result = await forgotManager.searchCode(code)
-  console.log({result})
   if (result){
     res.redirect('/forgot/reset-password')
   } else {
     res.redirect('/forgot')
   }
 })
-
 router.get('/github', passport.authenticate('github',
   { scope:['user:email'] }), async (req,res) => {})
-
 router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}),
   async (req,res) =>{
     req.session.username = req.user.email;
     res.redirect('/products')
   }
   )
-
 export default router;
+
+
+
+
+
+
+
+
 
 
 

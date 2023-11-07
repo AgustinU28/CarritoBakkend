@@ -484,7 +484,7 @@ h2{
 .forgot-container{
     width: 100vw;
     height: 100vh;
-    background-image:url('/images/olvidar.jpg');
+    background-image:url('/images/grocery-store3.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -515,7 +515,7 @@ h2{
     padding: 8px 5px;
     outline: none;
     border: none;
-    border-bottom: 0.5px solid black;
+    border-bottom: 0.5px solid #252525;
     font-size: 1rem;
     width: 70%;
 }
@@ -529,7 +529,7 @@ h2{
     height: 2rem;
     cursor: pointer;
     margin-top: 25px;
-    background-color: green;
+    background-color: #252525;
     color: #fafafa;
 }
 
@@ -548,7 +548,7 @@ h2{
     padding: 20px 4%;
     background-color: #fafafa;
     margin-bottom: 70px;
-    border-bottom: 10px solid red;
+    border-bottom: 10px solid rgba(43, 11, 117, 0.479);
 }
 
 .header-products img{
@@ -787,7 +787,7 @@ margin-top: 25px;
 /* ---------------Carrito----------- */
 .container_checkoutCart{
     height: 400px;
-    overflow-x: scroll;
+    overflow-y: scroll;
     width: 80%;
     
 }
@@ -859,6 +859,58 @@ margin-top: 25px;
     font-weight: bold;
     padding: 0 5%;
 }
+
+.btn_container{
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.confirmPurchaseBTN{
+    padding: 16px 60px;
+    font-size: 1.3rem;
+    background-color: rgb(40, 18, 75);
+    color: #fafafa;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-block;
+    border-top: 2px solid #252525;
+    border-right: 2px solid transparent;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin-left: 16px;
+  }
+
+.loader::after {
+content: '';  
+box-sizing: border-box;
+position: absolute;
+left: 0;
+top: 0;
+width: 48px;
+height: 48px;
+border-radius: 50%;
+border-left: 4px solid #FF3D00;
+border-bottom: 4px solid transparent;
+animation: rotation 0.5s linear infinite reverse;
+}
+@keyframes rotation {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+} 
 
 @media (max-width: 1400px){
     #productList{

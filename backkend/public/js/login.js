@@ -10,13 +10,14 @@ async function postLogin(username, password, currentCartID) {
       },
       body: JSON.stringify({ username, password, currentCartID }),
     });
-    const result = await response.json();
-    console.log({response})
-    console.log({result})
+    if (response.ok) {
+      const result = await response.json();
+      console.log({result})
+      return result;
+    }
     return response;
-    
   } catch (error) {
-    console.log({error})
+    console.log(error)
     return {'status':"Not ok"}
   }
 }
@@ -31,7 +32,7 @@ async function getCartId(frontUser) {
           method:"POST",
       });
       const data = await res.json();
-      currentCartID = await data.data._id;
+      currentCartID = await data.cart._id;
       localStorage.setItem('storedUser', frontUser)
       localStorage.setItem("cartIdStored",currentCartID)
   }
@@ -61,8 +62,7 @@ loginForm.addEventListener("submit", async e => {
   const password = document.getElementById("password").value;
   currentCartID = await getCartId(username);
   const response = await postLogin(username, password, currentCartID);
-  // console.log({response})
-  if(response.ok){
+  if(response.status === 'ok'){
     window.location.href = '/products';
   } else {
     errorLogin.style.display = 'block'

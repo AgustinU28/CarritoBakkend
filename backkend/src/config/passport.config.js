@@ -8,10 +8,9 @@ import UsersDTO from '../dto/users.dto.js'
 
 dotenv.config();
 
- const GITHUB_CLIENT_ID =process.env.GITHUB_CLIENT_ID;
- const GITHUB_CLIENT_SECRET =process.env.GITHUB_CLIENT_SECRET;
- const GITHUB_CALLBACK_URL =process.env.GITHUB_CALLBACK_URL;
-
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+const GITHUB_CALLBACK_URL = process.env.GITHUB_CALLBACK_URL;
 
 const localStrategy = local.Strategy;
 
@@ -21,19 +20,15 @@ const initializePassport = async () =>{
             const {first_name, last_name, email, age} = req.body;
             try{
                 let user = await UserModel.findOne({email:username});
-
                 if (user) {
                     console.log('user already exists');
                     return done(null, false)
                 }
-
                 const newUser = {first_name, last_name, email, age, password:createHash(password)};
                 const formatedNewUser = new UsersDTO(newUser);
                 formatedNewUser.currentCartID = req.body.currentCartID; 
                 let result = await UserModel.create(formatedNewUser);
-                console.log({result})
                 return done(null, result);
-
             } catch (error) {
                 return done('error al obtener el usuario'+error);
             }
@@ -58,10 +53,10 @@ const initializePassport = async () =>{
         }
     })
     )
-    passport.use('github', new GitHubStrategy({clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callbackURL: GITHUB_CALLBACK_URL}, 
+    passport.use('github', new GitHubStrategy({clientID: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET, callbackURL: GITHUB_CALLBACK_URL,  scope: 'user:email'}, 
             async (accessToken, refreshToken, profile, done) => {
             try {
-                let user = await UserModel.findOne({email: profile._json.email}) || await UserModel.findOne({email: `${profile._json.login}@mail.com`})
+                let user = await UserModel.findOne({email: profile.emails[0].value}) || await UserModel.findOne({email: `${profile._json.login}@mail.com`})
                 if (!user) {
                     const newUser = {
                         first_name: profile._json.login,

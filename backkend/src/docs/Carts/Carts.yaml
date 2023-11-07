@@ -1,0 +1,273 @@
+paths:
+  /carts{cid}:
+    get:
+      summary: Obtiene un carrito
+      parameters: 
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito obtenido satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "401":
+          description: Usuario no autenticado
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error
+    delete:
+      summary: Elimina un carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito eliminado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "401":
+          description: Usuario no autenticado
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error          
+    put:
+      summary: Agrega un array de productos a un carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateManyProductsOfCart'
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carrito actualizado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "401":
+          description: Usuario no autenticado
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error   
+  /carts:
+    post:
+      summary: Crea un nuevo carrito
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: Carrito creado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "500":
+          description: Server error  
+  /carts{cid}/totalprods:
+    get:
+      summary: Devuelve la cantidad de productos en un carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Obtiene la cantidad de productos en un carrito satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error   
+  /carts{cid}/product/{pid}:
+    post:
+      summary: Agrega un nuevo producto al carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      - name: pid
+        description: ObjectId que identifica al producto buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: Producto agregado al carrito satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error   
+    put:
+      summary: Agrega un nuevo producto al carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      - name: pid
+        description: ObjectId que identifica al producto buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProductOfCart'
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Producto del carrito actualizado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error   
+    delete:
+      summary: Elimina un producto del carrito carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      - name: pid
+        description: ObjectId que identifica al producto buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Producto del carrito actualizado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error
+  /carts{cid}/purchase:
+    get:
+      summary: Elimina un producto del carrito carrito
+      parameters:
+      - name: cid
+        description: ObjectId que identifica al carrito buscado
+        in: path
+        required: true
+        schema: 
+          $type: string
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: Ticket generado satisfactoriamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/carts'
+        "400":
+          description: El id del carrito es inválido
+        "404":
+          description: El carrito solicitado no existe
+        "500":
+          description: Server error
+components:
+  schemas:
+    carts:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de MongoDB
+        products: 
+          type: Array
+          description: Los productos agregados por el usuario al carrito
+  requestBodies:
+    updateProductOfCart:
+      type: object
+      properties:
+        qty:
+          type: integer
+          description: Cantidad a agregar de un producto
+      example:
+        qty: 5
+    updateManyProductsOfCart:
+      type: object
+      properties:
+        products:
+          type: array
+          description: productos para agregar al carrito
+      example:
+        products: {"newProducts":[{"product":"64dc46571553f1dfa5625"}, {"product":"64dc46961553f1dfa5625ecf"}, {"product":"64dc46b51553f1dfa5625ed2"}]}
