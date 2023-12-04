@@ -24,6 +24,7 @@ import mockingProducts from './routes/mockingProducts.routes.js';
 import loggerTest from './routes/loggerTest.routes.js';
 import userRoutes from './routes/users.routes.js';
 import premiumRouter from './routes/premium.routes.js';
+import paymentRouter from './routes/payments.routes.js';
 
 import { ProductManager } from "./dao/dbManagers/DBproductManager.js";
 import { MessageManager } from './dao/dbManagers/DBmessageManager.js'; 
@@ -128,6 +129,8 @@ app.use("/loggertest", loggerTest);
 app.use("/api/users", userRoutes);
 app.use("/premium", premiumRouter);
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+app.use("/api/payments", paymentRouter)
+
 
 // Inicialización del server
 const httpServer = app.listen(PORT, (e)=>{

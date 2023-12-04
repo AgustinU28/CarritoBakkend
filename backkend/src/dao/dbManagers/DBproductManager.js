@@ -1,49 +1,51 @@
 import { productsModel } from "../models/products.model.js";
 
 export class ProductManager {
-  async getProducts(limitProd, pageProd, sortProd, value) {
-      if (value == "Inicio") {
-        value = ""
+  async getAll( limit = 10, page = 1, sorted = 1, search = "" ) {
+      if (search == "Inicio") {
+        search = ""
+      }
+      if(search == 'undefined' || search == 'null'){
+        search = ""
       }
       let options;
-      sortProd != 0 ? options = {limit:limitProd, page:pageProd, sort: { price: sortProd }, lean: true} : options = {limit:limitProd, page:pageProd, lean:true};
-  
+      sorted != 0 ? options = {limit:limit, page:page, sort: { price: sorted }, lean: true} : options = {limit:limit, page:page, lean:true};
       try{
         let response;
-        if (value) {
-          response = await productsModel.paginate({title: {$regex: `${value}`, $options: 'i'}},options)
+        if (search) {
+          response = await productsModel.paginate({title: {$regex: `${search}`, $options: 'i'}},options)
           if (response.docs.length == 0) {
-            response = await productsModel.paginate({category: {$regex: `${value}`, $options: 'i'}},options)
+            response = await productsModel.paginate({category: {$regex: `${search}`, $options: 'i'}},options)
           }
         } else {
           response = await productsModel.paginate({},options)
         }
-        return {response , sortProd};
+        return response;
       } catch {
         e => console.log(e)
       }
       
     }
-    async getProductsRealtime(){
-      return await productsModel.find({}).lean();
+    async getById(pid) {
+      return await productsModel.findOne({ _id: pid });
     }
-    async getProductById(id) {
-      return await productsModel.findOne({ _id: id });
+    async getByCode(code) {
+      return await productsModel.findOne({ code: code });
     }
-  
-    async addProduct(data) {
-      const res = await productsModel.create(data);
+    async add(product) {
+      const res = await productsModel.create(product);
       return res;
     }
-  
-    async updateProductById(id, data) {
+    async updateById(id, data) {
       const res = await productsModel.findByIdAndUpdate(id, data);
       return res;
     };
-
-    async deleteProductById(id){
+    async deleteById(id){
       const res = await productsModel.findByIdAndDelete(id);
       return res;
     };
+    async getRealtime(){
+      return await productsModel.find({}).lean();
+    }
   }
   

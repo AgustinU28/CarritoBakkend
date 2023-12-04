@@ -23,22 +23,8 @@ const updateCart = async (currCart)=>{
 
 // Función para setear la parte dinámica de la url
 function setParams(sort,limit,search){
-    if(!search){
-        if(window.location.search != ''){
-            let urlSearchParam = window.location?.search?.split('&')[2].split('=')[1] || "";
-            search = urlSearchParam;
-        }
-    } 
     let params = `/products?limit=${limit}&sorted=${sort}&search=${search}`;
-    let url = new URL(window.location.href.split('?')[0]);
-    url.pathname = '/products';
-    url.searchParams.append('search',search);
-    url.searchParams.append('sorted', sort);
-    url.searchParams.append('limit', limit);
-
-    console.log({params});
-    console.log({url})
-    // return params;
+    return params;
 }
 
 // Inicia
@@ -78,8 +64,17 @@ if (viewCart) {
 
 if(paramsForm){
     paramsForm.addEventListener('change', e =>{
-        let params = setParams(sort.value, limit.value, search.value || "");
-        // window.location.href = params;
+        let url = new URL(window.location)
+        let searchParam;
+        if(url.searchParams.get('search') != '' && search.value == ''){
+            searchParam = url.searchParams.get('search');
+            console.log(searchParam)
+        } else {
+            searchParam = search.value || ""
+        }
+        
+        let params = setParams(sort.value, limit.value, searchParam);
+        window.location.href = params;
     })
 }
 
@@ -113,7 +108,10 @@ prices.forEach(price=>{
 
 sections.forEach(section =>{
     section.addEventListener('click', e =>{
-        window.location.href = `/products?search=${section.innerText}`
+        let url = new URL(window.location);
+        let limit = url.searchParams.get('limit') || 10;
+        let sorted = url.searchParams.get('sorted') || 0;
+        window.location.href = `/products?limit=${limit}&sorted=${sorted}&search=${section.innerText}`
     })
 })
 

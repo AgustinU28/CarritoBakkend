@@ -15,9 +15,9 @@ input::-webkit-inner-spin-button {
 
 
 h1{
-    background: #0F2027;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+    background: #0F2027;  
+    background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  
+    background: linear-gradient(to right, #2C5364, #203A43, #0F2027); 
     display: flex;
     align-items: center;
     justify-content: end;
@@ -101,7 +101,7 @@ h2{
         ". . .";  
     justify-items: stretch;
     align-items: stretch;
-    padding: 25px 4%;
+    padding: 25px 10%;
 }
 
 #productList li{
@@ -159,7 +159,7 @@ h2{
     border-radius: 5px;
     outline: none;
     border: none;
-    background-color: rgb(26, 7, 58);
+    background-color: red;
     color: #fafafa;
     cursor: pointer;
     display: flex;
@@ -287,6 +287,18 @@ h2{
     gap: 10px;
     width: 70%;
 }
+#login-username-label{
+    visibility: hidden;
+    color: #474747;
+    transition: visibility 0.5s;
+    
+}
+#login-password-label{
+    visibility: hidden;
+    color: #474747;
+    margin-top: 21px;
+    transition: visibility 0.5s;
+}
 
 .login-container .login-form input{
     padding: 8px 5px;
@@ -326,8 +338,6 @@ h2{
     margin-bottom: 25px;
     cursor: pointer;
 }
-
-
 .login-container .login-form button:active{
     background-color: #2e4b36;
 }
@@ -479,63 +489,6 @@ h2{
     background-color: #2e4b36;
 }
 
-/* ------------ Recuperar contraseña ------------ */
-
-.forgot-container{
-    width: 100vw;
-    height: 100vh;
-    background-image:url('/images/grocery-store3.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-    align-items: center;
-}
-.forgot-form{
-    height: 100vh;
-    width: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
-    align-items: center;
-    background-color: #fafafa;
-    padding-top: 180px;
-    gap: 10px;
-}
-
-.forgot-title{
-    margin-bottom: 25px;
-    color: #252525;
-    font-size: 2rem;
-}
-
-.forgot-container .forgot-form input{
-    padding: 8px 5px;
-    outline: none;
-    border: none;
-    border-bottom: 0.5px solid #252525;
-    font-size: 1rem;
-    width: 70%;
-}
-
-#forgotPassBtn{
-    font-size: 1rem;
-    border: 0.5px solid #252525;
-    outline: none;
-    width: 70%;
-    align-self: center;
-    height: 2rem;
-    cursor: pointer;
-    margin-top: 25px;
-    background-color: #252525;
-    color: #fafafa;
-}
-
-#forgotPassBtn:active{
-    background-color: #2e4b36;
-}
 
 /* ------------------------------ PRODUCTS VIEW ------------------------------------ */
 
@@ -545,10 +498,10 @@ h2{
     justify-content: space-between;
     height: 130px;
     width: 100%;
-    padding: 20px 4%;
+    padding: 20px 10%;
     background-color: #fafafa;
     margin-bottom: 70px;
-    border-bottom: 10px solid rgba(43, 11, 117, 0.479);
+    border-bottom: red;
 }
 
 .header-products img{
@@ -681,13 +634,12 @@ header ul li.realTimeProductsBtn:hover{
     font-weight: bold;
     transition: all 300ms;
 }
-
 .params{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 4%;
+    padding: 0 10%;
 }
 .params_limit-sorted{
     gap: 8px;
@@ -737,6 +689,7 @@ header ul li.realTimeProductsBtn:hover{
     border: none;
     border-bottom: 1px solid #d3d3d3;
     font-size: 1rem;
+    background-color: transparent;
 }
 
 .params_limit{
@@ -876,42 +829,93 @@ align-items: center;
     border-radius: 5px;
 }
 
-
-
 .loader {
-    width: 48px;
-    height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    aspect-ratio: 1;
     border-radius: 50%;
-    display: inline-block;
-    border-top: 2px solid #252525;
-    border-right: 2px solid transparent;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    margin-left: 16px;
+    border: 8px solid #252525;
+    animation:
+      l20-1 0.8s infinite linear alternate,
+      l20-2 1.6s infinite linear;
+  }
+  @keyframes l20-1{
+     0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+     12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+     25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+     50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+     62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+     75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+     100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+  }
+  @keyframes l20-2{ 
+    0%    {transform:scaleY(1)  rotate(0deg)}
+    49.99%{transform:scaleY(1)  rotate(135deg)}
+    50%   {transform:scaleY(-1) rotate(0deg)}
+    100%  {transform:scaleY(-1) rotate(-135deg)}
   }
 
-.loader::after {
-content: '';  
-box-sizing: border-box;
-position: absolute;
-left: 0;
-top: 0;
-width: 48px;
-height: 48px;
-border-radius: 50%;
-border-left: 4px solid #FF3D00;
-border-bottom: 4px solid transparent;
-animation: rotation 0.5s linear infinite reverse;
+.not-found{
+    height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
 }
-@keyframes rotation {
-0% {
-    transform: rotate(0deg);
-}
-100% {
-    transform: rotate(360deg);
-}
-} 
 
+/* ------------------ purchase success --------------------- */
+.success_container{
+    padding: 0 10%;
+    min-height: 56vh;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.titlePurchase{
+    color: #2e4b36;
+    padding: 0;
+    margin-bottom: 0;
+}
+.datePurchase{
+
+}
+.hr-paymentSuccess{
+    color: #2e4b36;
+    height: 6px;
+    width: 80%;
+    border: none;
+    outline: none;
+    background-color: #2e4b36;
+    margin-bottom: 20px;
+}
+.titleProdsPurchased{
+    font-weight: bold;
+}
+.amountPurchase{
+    font-weight: bold;
+}
+.btn-back-container{
+    padding: 0 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.success-back{
+    padding: 16px 80px;
+    font-size: 1rem;
+    color: #fafafa;
+    background-color: #252525;
+    border: none;
+    outline: none;
+}
+.remainingTitle{
+    margin-top: 25px;
+    color: red;
+}
 @media (max-width: 1400px){
     #productList{
         grid-template-columns: 1fr 1fr 1fr 1fr

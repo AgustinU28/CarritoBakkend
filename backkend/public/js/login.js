@@ -1,3 +1,10 @@
+const errorLogin = document.querySelector('.error-login');
+const loginForm = document.getElementById("login-form");
+const userInput = document.getElementById("username");
+const passInput = document.getElementById("password");
+const userLabel = document.getElementById('login-username-label')
+const passLabel = document.getElementById('login-password-label')
+
 let currentCartID;
 let frontUser;
 
@@ -22,7 +29,6 @@ async function postLogin(username, password, currentCartID) {
   }
 }
 
-
 async function getCartId(frontUser) {
   currentCartID = localStorage.getItem("cartIdStored");
   storedUser = localStorage.getItem('storedUser');
@@ -32,28 +38,22 @@ async function getCartId(frontUser) {
           method:"POST",
       });
       const data = await res.json();
-      currentCartID = await data.cart._id;
+      console.log(data)
+      currentCartID = await data.payload._id;
       localStorage.setItem('storedUser', frontUser)
       localStorage.setItem("cartIdStored",currentCartID)
   }
   return currentCartID;
 }
-const errorLogin = document.querySelector('.error-login')
 
-
-const loginForm = document.getElementById("login-form");
-const userInput = document.getElementById("username")
-const passInput = document.getElementById("password")
-
-userInput.addEventListener('keydown', e =>{
-  if(errorLogin.style.display == 'block'){
-    errorLogin.style.display = 'none'
-  }
+userInput.addEventListener('keyup', e =>{
+  if(errorLogin.style.display == 'block')  errorLogin.style.display = 'none';
+  userInput.value === '' ? userLabel.style.visibility = 'hidden' : userLabel.style.visibility = 'visible';
 })
-passInput.addEventListener('keydown', e =>{
-  if(errorLogin.style.display == 'block'){
-    errorLogin.style.display = 'none'
-  }
+
+passInput.addEventListener('keyup', e =>{
+  if(errorLogin.style.display == 'block') errorLogin.style.display = 'none'
+  passInput.value === '' ? passLabel.style.visibility = 'hidden' : passLabel.style.visibility = 'visible';
 })
 
 loginForm.addEventListener("submit", async e => {

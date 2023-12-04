@@ -137,4 +137,51 @@ export class ProductManager{
 }
 
 
+// -------------------------------------------------------------
+
+// Prueba del código
+
+// const almacen = new ProductManager('./productos_almacen.json');
+// const kiosko = new ProductManager('./productos_kiosko.json');
+
+// Agrego los productos
+
+// almacen.addProduct("Agua","Agua mineral sin gas marca: Villa del Sur, botella 500ml", 250, "Imagen1","4fx2654fx154",35);
+// almacen.addProduct("Pepsi","Bebida gaseosa marca: Pepsi, botella 2.25lts", 850, "Imagen1","4fx2660fb164",100);
+// almacen.addProduct("Gancia Pomelo","Bebida con alcohol sabor pomelo marca: Gancia, lata 500ml", 420, "Imagen1","5fx2560df165",100);
+// almacen.addProduct("Fernet Branca","Bebida con alcohol marca: Branca, botella 1lts", 1950, "Imagen1","1bx2440db424",150);
+
+// kiosko.addProduct("Alfajor triple","Alfajor de dulce de leche con baño de chocolate marca: Jorgito 90gr ", 250, "Imagen1","4fx2654fx5644",25);
+// kiosko.addProduct("Barra de chocolate","Chocolate con leche marca: Milka 60gr", 230, "Imagen1","4fx2660dsf432",250);
+// kiosko.addProduct("Gomitas surtidas","Gomitas frutales marca Yummy 50gr", 99, "Imagen1","5fxdf264df165",110);
+// kiosko.addProduct("Fernet Branca","Bebida con alcohol marca Branca, botella 2lts", 3250, "Imagen1","fsdf86sdf0db44",190);
+
+
+// Ver los productos
+
+// console.log(almacen.getProducts());
+// console.log(kiosko.getProducts());
+
+// cambiar por un id Válido al momento de generar los json.
+// let idProd = '5bb0e3e4-27c9-4701-b5c3-038108494bbb'
+// ---------------------
+
+// Ver un producto por id.
+
+// console.log(almacen.getProductById(idProd));
+
+// Actualizar un producto
+
+// const updatedFields = {
+//     title: "Agua con gas",
+//     price: 290
+// }
+
+// const updatedProduct = almacen.updateProductById(idProd, updatedFields);
+
+// console.log(almacen.getProductById(idProd));
+
+// Borrar un producto
+
+// console.log(almacen.deleteProductById(idProd));
 

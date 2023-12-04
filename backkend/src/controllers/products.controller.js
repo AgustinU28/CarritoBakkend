@@ -4,15 +4,16 @@ const productManager = new ProductManager()
 
 export class ProductController {  
     getAll = async (req, res) => {
-      const { limit, page, sorted, search } = req.query;
+      let { limit, page, sorted, search } = req.query;
       const {username, role} = req.session;
       const products = await productManager.getAll( limit , page , sorted , search )
-      if (products.docs.length === 0) {
-        return null
-      }
+     
       // Parámetros para la plantilla de Handlebars
       let noSort, mayorSort, menorSort, limit25, limit10; noSort = mayorSort = menorSort = limit25 = limit10 = false;
       let userRole, adminRole, premiumRole;
+      if(limit == undefined){
+        limit = 10
+      }
       limit == 25 ? limit25 = true : limit10 = true; 
       (sorted == 1) ? menorSort = true
                     : (sorted == -1) ? mayorSort = true
@@ -35,6 +36,16 @@ export class ProductController {
       //       username,
       //       userRole, adminRole,
       //   })
+      if (products.docs.length === 0) {
+        return res.status(404).render('products', {        
+          limit, limit25, limit10,
+          noSort, mayorSort, menorSort,
+          username,
+          userRole, adminRole, premiumRole,
+          search
+          }
+        )
+      }
       return res.status(200).render("products", {
         products: products.docs,
         hasPrevPage: products.hasPrevPage,
@@ -45,10 +56,11 @@ export class ProductController {
         totalPages: products.totalPages,
         page: products.page,
         pagingCounter: products.pagingCounter,
-        limit, limit25, limit10,
+        limit,limit10,limit25,
         noSort, mayorSort, menorSort,
         username,
-        userRole, adminRole, premiumRole
+        userRole, adminRole, premiumRole,
+        search
         })
     }
     getById = async (req, res) => {

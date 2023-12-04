@@ -15,6 +15,12 @@ import nodemailer from 'nodemailer';
 
 import { __dirname } from "../utils.js";
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const url = process.env.URL
+
 const userManager = new UserManager();
 const forgotManager = new ForgotManager();
 
@@ -77,8 +83,8 @@ router.post('/login', passport.authenticate('login'), async (req, res) => {
     req.session.username = req.user.email;
     req.session.currentCartID = req.user.currentCartID;
     req.session.role = req.user.role;
-
-    const result = await userManager.setCartID(req.user.email, req.user.currentCartID)
+    await userManager.setConectionTime(req.user._id);
+    await userManager.setCartID(req.user.email, req.user.currentCartID)
     res.status(200).json({status:'ok', message: 'Logueado exitosamente'})
   }
 })
@@ -89,13 +95,14 @@ router.post('/signup', passport.authenticate('register', {failureRedirect:'/sign
   req.session.role = req.user.role;
 
   const result = await userManager.setCartID(email, currentCartID)
+  await userManager.setConectionTime(req.user._id);
 
   res.status(200).json({status:'ok', message: 'user Registered', payload:result})
 })
 router.get('/logout', (req,res)=>{
-  req.logOut();
-  req.session.destroy((err) => {
+  req.session.destroy( async(err) => {
     if (!err) {
+      await userManager.setConectionTime(req.user._id);
       res.json({respuesta:'ok'});
     } else {
       req.logger.error('Error: no pudimos cerrar la sesión');
@@ -172,21 +179,20 @@ router.post("/forgotbtn", async (req, res) => {
           subject:"Resetear contraseña",
           html:`
           <body style="padding: 0; margin: 0;">
-              <header style="width: 100%; height: 120px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;background: #0F2027;  /* fallback for old browsers */; background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */;background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */; ">
-                  <picture style="width: 100%;">
-                      <img src="cid:Logo" alt="The Market Logo" style="height: 100px;">
-                  </picture>
-              </header>
-              <main>
-              <p style="margin-left: 40px; margin-top: 30px;"> Solicitud creada el ${forgotObj.createdAt} <span style="color: rgb(175, 52, 52);">*</span></p>
-                  <p style="text-align: end; padding: 0 20px;">Reset de contraseña de tu cuenta ${forgotObj.email} en tienda The Market ></p>
-                  <p style=""> Hacé click en el siguiente botón para realizar el reseteo de tu contraseña</p>
-                  <button><a>Resetear contraseña</a><button>
-                  <p style=""> Si el botón no funciona podés ingresar a la siguiente URL http://localhost:8080/api/session/forgot/${forgotObj.code}</p>
-                  <p style="margin-left: 40px;margin-top: 50px;"><span style="color: rgb(175, 52, 52);">*</span>Si no realizaste esta solicitud, por favor desestimá este mail</p>
-              </main>
-              <footer style="height: 50px; width: 100%; background-color: #252525; color: #fafafa; display: flex; align-items: center; margin-top: 30px;"><p style="margin-left: 20px;">Equipo The Market®</p></footer>
-          </body>`,
+          <header style="width: 100%; height: 120px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;background: #0F2027;  /* fallback for old browsers */; background: -webkit-linear-gradient(to right, #2C5364, #203A43, #0F2027);  /* Chrome 10-25, Safari 5.1-6 */;background: linear-gradient(to right, #2C5364, #203A43, #0F2027); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */; ">
+              <picture style="width: 100%;">
+                  <img src="cid:Logo" alt="The Market Logo" style="height: 100px;">
+              </picture>
+          </header>
+          <main>
+          <p style="margin-left: 40px; margin-top: 30px;"> Solicitud creada el ${forgotObj.createdAt} <span style="color: rgb(175, 52, 52);">*</span></p>
+              <p style="text-align: end; padding: 0 20px;">Reset de contraseña de tu cuenta ${forgotObj.email} en tienda The Market ></p>
+              <p style="margin-left: 40px"> Hacé click en la siguiente URL para realizar el reseteo de tu contraseña:</p>
+              <p style="margin-left: 40px"> Si el link no funciona podés copiar el link y pegarlo en tu navegador <span style="font-weight: bold;">${url}/api/session/forgot/${forgotObj.code}</span></p>
+              <p style="margin-left: 40px;margin-top: 50px;"><span style="color: rgb(175, 52, 52);">*</span>Si no realizaste esta solicitud, por favor desestimá este mail</p>
+          </main>
+          <footer style="height: 50px; width: 100%; background-color: #252525; color: #fafafa; display: flex; align-items: center; margin-top: 30px;"><p style="margin-left: 20px;">Equipo The Market®</p></footer>
+      </body>`,
           attachments:[{
               filename: 'Logo.png',
               path:__dirname+'/../public/images/Logo.png',

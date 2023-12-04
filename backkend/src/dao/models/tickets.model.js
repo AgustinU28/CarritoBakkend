@@ -10,6 +10,14 @@ const ticketsSchema = new mongoose.Schema({
     purchase_datetime: Date,
     amount: Number,
     purchaser: String,
+    purchasedProds: {
+        type: Array,
+        default: [],
+    },
+    remainingProds: {
+        type: Array,
+        default: [],
+    },
 });
 
 

@@ -13,87 +13,75 @@ const productManager = new ProductManager();
 const cartManager = new CartManager();
 
 export class TicketManager {
-    async addTicket(data, username) {
-        let cart = data;
-        let products = [...cart.products];
-        let prodsTemp = [];
+    async addTicket(data, username = 'gabriel.monlezun@gmail.com') {
+        // let cart = data;
+        // let products = [...cart.products];
+        // let prodsTemp = [];
+        // // fn para comparar igualdad entre pid
+        // const equalIDs = (currProd, tmpProd) => { 
+        //     if(tmpProd.product._id == currProd.product._id){
+        //         return true        
+        //     } else {
+        //         return false
+        //     }
+        // }
+        // // Reccorro los productos del carrito, para buscar duplicados, agrego un nuevo array de objetos para determinar cantidades y precio total
+        // for (let i = 0; i < products.length; i++) {
+        //     let prodIndex = prodsTemp.findIndex(prod => { if(equalIDs(products[i],prod)){ return true } })
+        //     if (prodIndex == -1) {
+        //         let price = products[i].product.price;
+        //         prodsTemp.push({...products[i],quantity:1, price: price.toString()})
+        //     } else {
+        //         let newQuantity = Number(prodsTemp[prodIndex].quantity) + 1;
+        //         let newPrice = Number(prodsTemp[prodIndex].price) * newQuantity;
+        //         prodsTemp[prodIndex] = {...prodsTemp[prodIndex], price: newPrice.toString(), quantity: newQuantity.toString()}
+        //     }
+        // }
+        // // arrays para separar entre aquellos productos que cuentan con stock y los que no
+        // let remainingProds = [];
+        // let purchasedProds = [];
+        // for (let i = 0; i < prodsTemp.length; i++) {
+        //     let productID = prodsTemp[i].product._id;
+        //     let currProd = await productManager.getById(productID);
+        //     let actualStock = currProd.stock;
+        //     let quantity = prodsTemp[i].quantity;
+        //     let tmpIndex = products.findIndex(prod => equalIDs(prodsTemp[i],prod))
+        //     let cartProd = products[tmpIndex]
+        //     // Casos, si el pedido es mayor al stock o si supera al stock actual
+        //     if(actualStock - quantity > 0){
+        //         let newProductStock = actualStock - quantity;
+        //         await productManager.updateById(productID, {stock: newProductStock})
+        //         purchasedProds.push(prodsTemp[i])
+        //     } else {
+        //         if(actualStock == 0){
+        //             for (let i = 0; i < quantity; i++) {
+        //                 remainingProds.push(cartProd) 
+        //             }
+        //         } else {
+        //             await productManager.updateById(productID, {stock: 0})
+        //             purchasedProds.push({...prodsTemp[i],quantity: actualStock})
+        //             let remainQty = quantity - actualStock;
+        //             for (let i = 0; i < remainQty; i++) {
+        //                 remainingProds.push(cartProd)
+        //             }
+        //         }
+        //     }
+        // }
+        // // Actualizo el carrito con los productos que no hay stock
+        // if (remainingProds.length > 0){
+        //     await cartManager.modifyArrCart(cart._id, remainingProds)
+        // }
+        // // Calculo el total de la compra
+        // let total = 0;
+        // purchasedProds.forEach(product => { total += Number(product.price) })
+        // // Genero el objeto ticket   
+        // let newTicket = {
+        //     code: crypto.randomUUID(),
+        //     purchase_datetime: new Date(),
+        //     amount: total,
+        //     purchaser: username
+        // }
 
-        // fn para comparar igualdad entre pid
-        let equalIDs = (currProd, tmpProd) =>{
-            if (tmpProd.product._id.equals(currProd.product._id)) {
-                return true
-            } else {
-                return false
-            }
-        }
-
-        // Reccorro los productos del carrito, para buscar duplicados, agrego un nuevo array de objetos para determinar cantidades y precio total
-        for (let i = 0; i < products.length; i++) {
-            let prodIndex = prodsTemp.findIndex(prod => {
-                if(equalIDs(products[i],prod)){
-                    return true
-                }
-            })
-            if (prodIndex == -1) {
-                let price = products[i].product.price;
-                prodsTemp.push({...products[i],quantity:1, price: price.toString()})
-            } else {
-                let newQuantity = Number(prodsTemp[prodIndex].quantity) + 1;
-                let newPrice = Number(prodsTemp[prodIndex].price) * newQuantity;
-                prodsTemp[prodIndex] = {...prodsTemp[prodIndex], price: newPrice.toString(), quantity: newQuantity.toString()}
-            }
-
-        }
-
-        // arrays para separar entre aquellos productos que cuentan con stock y los que no
-        let remainingProds = [];
-        let purchasedProds = [];
-        for (let i = 0; i < prodsTemp.length; i++) {
-            let productID = prodsTemp[i].product._id;
-            let currProd = await productManager.getProductById(productID);
-            
-            let actualStock = currProd.stock;
-            
-            let quantity = prodsTemp[i].quantity;
-            let tmpIndex = products.findIndex(prod => equalIDs(prodsTemp[i],prod))
-            let cartProd = products[tmpIndex]
-            // Casos, si el pedido es mayor al stock o si supera al stock actual
-            if(actualStock - quantity > 0){
-                let newProductStock = actualStock - quantity;
-                await productManager.updateProductById(productID, {stock: newProductStock})
-                purchasedProds.push(prodsTemp[i])
-            } else {
-                if(actualStock == 0){
-                    for (let i = 0; i < quantity; i++) {
-                        remainingProds.push(cartProd) 
-                    }
-                } else {
-                    await productManager.updateProductById(productID, {stock: 0})
-                    purchasedProds.push({...prodsTemp[i],quantity: actualStock})
-                    let remainQty = quantity - actualStock;
-                    for (let i = 0; i < remainQty; i++) {
-                        remainingProds.push(cartProd)
-                    }
-                }
-                
-            }
-        }
-        // Actualizo el carrito con los productos que no hay stock
-        if (remainingProds.length > 0){
-            await cartManager.modifyArrCart(cart._id, remainingProds)
-        }
-        // Calculo el total de la compra
-        let total = 0;
-        purchasedProds.forEach(product => {
-            total += Number(product.price)
-        })
-        // Genero el objeto ticket   
-        let newTicket = {
-            code: crypto.randomUUID(),
-            purchase_datetime: new Date(),
-            amount: total,
-            purchaser: username
-        }
         // Config del mail
         const transport = nodemailer.createTransport({
             service: 'gmail',
@@ -104,7 +92,7 @@ export class TicketManager {
             }
         })
         // envío el mail
-        await transport.sendMail({
+        const mail = await transport.sendMail({
             from:`Purchase Testing <${process.env.USER_MAIL}>`,
             to:`${username}`,
             subject:"Compra reservada exitosamente",
@@ -129,9 +117,7 @@ export class TicketManager {
                 cid:'Logo'
             }]
         })
-
-        console.log('compra finalizada!')
-        const res = await ticketsModel.create(newTicket);
-        return {ticket: res, remaining: remainingProds, purchased: purchasedProds};
+        // const res = await ticketsModel.create(newTicket);
+        return {response: res};
     }
 }

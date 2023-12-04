@@ -1,12 +1,8 @@
 <div>
   <header class="header-products">
-      <a href="/products"><img src="/images/Logo.png" alt="Business logo"></a>
+      <a href="/products"><img src="/images/icono.jpg" alt="Business logo"></a>
       <ul class="header-sections">
         <li class="header-section">Inicio</li>
-        <li class="header-section">Almacén</li>
-        <li class="header-section">Bebidas</li>
-        <li class="header-section">Limpieza</li>
-        <li class="header-section">Congelados</li>
         {{#if adminRole}}<li class="realTimeProductsBtn">Administrar</li>{{/if}}
       </ul>
       <div class="user-cart_container">
@@ -25,7 +21,7 @@
 
   
   <form action="" class="params">
-    <h2 class="params-title">Todos los productos</h2>   
+    <h2 class="params-title">Todas las PC Gamer</h2>   
     <div class="params_search">
       <input type="text" name="search" id="search" placeholder="Buscar">
       <button type="submit" id="btnSubmit"><i class="fa-solid fa-magnifying-glass"></i></button>      
@@ -48,34 +44,37 @@
 
  
   </form>
-  
-  <ul id="productList">
-    {{#if adminRole}}
-      {{#each products}}
-        <li class="product_card">
-          <img src={{this.thumbnail}} class="product_card-img"/>
-          <h3 class="product_card-title">{{this.title}}</h3>
-          <p class="product_card-description">{{this.description}}</p>
-          <div class="product_card-cartprice">
-              <button type="button" disabled><i class="fa-solid fa-cart-shopping"></i>[X] Agregar</button>
-              <p class="product_card-price">${{this.price}}</p>
-          </div>
-        </li>
-      {{/each}}
-    {{else}}
+  {{#if products}}
+    <ul id="productList">
+      {{#if adminRole}}
         {{#each products}}
           <li class="product_card">
             <img src={{this.thumbnail}} class="product_card-img"/>
             <h3 class="product_card-title">{{this.title}}</h3>
             <p class="product_card-description">{{this.description}}</p>
             <div class="product_card-cartprice">
-                <button type="button" class="product_card-btnAddToCart" data-id="{{this._id}}" owner="{{this.owner}}"><i class="fa-solid fa-cart-shopping"></i>Agregar</button>
+                <button type="button" disabled><i class="fa-solid fa-cart-shopping"></i>[X] Agregar</button>
                 <p class="product_card-price">${{this.price}}</p>
             </div>
           </li>
         {{/each}}
-      {{/if}}
-  </ul>
+      {{else}}
+          {{#each products}}
+            <li class="product_card">
+              <img src={{this.thumbnail}} class="product_card-img"/>
+              <h3 class="product_card-title">{{this.title}}</h3>
+              <p class="product_card-description">{{this.description}}</p>
+              <div class="product_card-cartprice">
+                  <button type="button" class="product_card-btnAddToCart" data-id="{{this._id}}" owner="{{this.owner}}"><i class="fa-solid fa-cart-shopping"></i>Agregar</button>
+                  <p class="product_card-price">${{this.price}}</p>
+              </div>
+            </li>
+          {{/each}}
+        {{/if}}
+    </ul>
+  {{else}}
+    <div class="not-found">No encontramos ningún producto para tu búsqueda: {{search}}</div>
+  {{/if}}
   <div class="page-controller">
     {{#if hasPrevPage}}
           {{#if noSort}}
@@ -103,9 +102,7 @@
   </div>
   
   
-  <footer class="footer">
-    The Market® 2023 
-  </footer>
+ 
 </div>
 
 <script src="/js/products.js"></script>

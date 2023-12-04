@@ -26,7 +26,13 @@ export class CartController {
         }
         const products = [...cart.products];
         const prodsTemp = [];
-        const equalIDs = (currProd, tmpProd) => { tmpProd.product._id.equals(currProd.product._id) ? true : false }
+        const equalIDs = (currProd, tmpProd) => { 
+            if(tmpProd.product._id == currProd.product._id){
+                return true        
+            } else {
+                return false
+            }
+        }
         for (let i = 0; i < products.length; i++) {
             let prodIndex = prodsTemp.findIndex(prod => {
                 if(equalIDs(products[i],prod)){

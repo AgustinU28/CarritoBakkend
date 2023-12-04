@@ -1,19 +1,20 @@
 <div class="login-body">
   <div class="login-container">
     <form id="login-form" class="login-form">
-        <h2 class="login-title">Unete a Nosotros!</h2>
-        <input type="text" id="username" name="username" placeholder="Username/Email" required autofocus/>
+        <h2 class="login-title">Tienda Gamer</h2>
+        <label for="username" id="login-username-label">Usuario/Email</label>
+        <input type="text" id="username" name="username" placeholder="Usuario/Email" required autofocus/>
+        <label for="password" id="login-password-label">Contraseña</label>
         <input type="password" id="password" name="password" autocomplete="on" placeholder="Contraseña" required />
         <span class="error-login">Usuario o contraseña incorrectos, intente nuevamente</span>
-        <a id="forgotPass">Recuperar contraseña</a>
         <button id="login" type="submit">Ingresar</button>
     </form>  
-    <a href="/api/session/github" class="github-link"></i> Login con GitHub</a>
+    <a href="/api/session/github" class="github-link"></i> Iniciar con GitHub</a>
     <hr class="login-divider">
     <button id="registrate">Registrate</button>
   </div>
   <div class="logo-container">
-    <img src="/images/compu.jpg" alt="Login image Background">
+    <img src="/images/inicio.jpg" alt="Login image Background">
   </div>
     
 

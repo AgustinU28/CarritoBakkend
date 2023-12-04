@@ -71,8 +71,7 @@ function updateProductList(products) {
         <p>Descripción: ${product.description}</p>
         <p>Precio: ${product.price}</p>
         <img src=${product.thumbnail} />
-        <button class="btnEliminar" data-id="${product._id}">Eliminar</button>
-      `;
+        <button class="btnEliminar" data-id="${product._id}">Eliminar</button> `;
   
       // Agregar el evento de clic al botón de eliminación
       const btnEliminar = li.querySelector(".btnEliminar");
@@ -90,7 +89,3 @@ function updateProductList(products) {
     });
   }
 
-// const realTimeProductsBtn = document.querySelector('.realTimeProducts');
-// realTimeProductsBtn.addEventListener('click', e =>{
-//   window.location.href = '/realtimeproducts'
-// })

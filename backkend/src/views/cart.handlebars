@@ -1,6 +1,6 @@
 <div>
   <header class="header-products">
-      <a href="/products"><img src="/images/Logo.png" alt="Business logo"></a>
+      <a href="/products"><img src="/images/icono.jpg" alt="Business logo"></a>
       <ul class="header-sections">
         <li class="header-section">Inicio</li>
         {{#if adminRole}}<li class="realTimeProductsBtn">Administrar</li>{{/if}}
@@ -14,14 +14,15 @@
           <div class="viewCart"><i class="fa-solid fa-cart-shopping"></i><span class="countProducts"></span></div>
       </div>
   </header>
-  <div class="title_checkoutCart">Tu carrito</div>
-      <div class="productCart_Container_titles">
-        <span></span>
-        <span>Producto</span>
-        <span>$/u.</span>
-        <span>Cantidad</span>
-        <span>Precio</span>
-      </div>
+  <div class="checkout_container">
+    <div class="title_checkoutCart">TUS COMPUTADORAS GAMER</div>
+    <div class="productCart_Container_titles">
+      <span></span>
+      <span>Producto</span>
+      <span>$/u.</span>
+      <span>Cantidad</span>
+      <span>Precio</span>
+    </div>
     <div class="container_checkoutCart">
       {{#each prodsTemp}}
           <div class="productCart_Container">
@@ -33,11 +34,13 @@
           </div>
       {{/each}}
     </div>
-    <div class="total_Container"><span>Total :</span><span class="total_value">${{total}}</span></div>
-    <button type="button" class="confirmPurchaseBTN">Confirme su compra</button>
-  <footer class="footer">
-      Mi tienda de Computadoras Gamer
-  </footer>
+    <div class="total_Container"><span>Total a pagar:</span><span class="total_value">${{total}}</span></div>
+    <div class="btn_container">
+      <button type="button" class="confirmPurchaseBTN">Confirmar compra</button>
+    </div>
+  </div>
+  
+  
 </div>
 
 <script src="/js/products.js"></script>

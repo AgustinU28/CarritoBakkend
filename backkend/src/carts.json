@@ -1,38 +1,24 @@
 [
   {
-    "product_id": 1,
-    "quantity": 1
+    "id": "7737e00e-71f2-4f9f-bfe7-2f30a7e7ff85",
+    "products": [{ "id": "1", "quantity": 16 }]
   },
   {
-    "product_id": 2,
-    "quantity": 1
+    "id": "c95f37ec-7b33-4979-a07c-6623a7a473bf",
+    "products": [
+      { "id": "2", "quantity": 2 },
+      { "id": "5", "quantity": 5 }
+    ]
   },
   {
-    "product_id": 3,
-    "quantity": 1
+    "id": "c4a060c5-d88c-4faf-9019-3d31ec150c63",
+    "products": [
+      { "id": "5", "quantity": 5 },
+      { "id": "7", "quantity": 2 },
+      { "id": "1", "quantity": 1 },
+      { "id": "2", "quantity": 3 }
+    ]
   },
-  {
-    "product_id": 4,
-    "quantity": 1
-  },
-  {
-    "product_id": 5,
-    "quantity": 1
-  },
-  {
-    "product_id": 6,
-    "quantity": 1
-  },
-  {
-    "product_id": 7,
-    "quantity": 1
-  },
-  {
-    "product_id": 8,
-    "quantity": 1
-  },
-  {
-    "product_id": 9,
-    "quantity": 1
-  }
+  { "id": "8ded6a2a-3ecb-4fbe-a6ae-052ace4e7014", "products": [] },
+  { "id": "e20ffcb0-5f4a-4061-bd95-a2081efaeaf2", "products": [] }
 ]
